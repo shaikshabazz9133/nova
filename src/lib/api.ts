@@ -136,3 +136,42 @@ export async function getConversationMessages(
     }
   );
 }
+
+export async function deleteConversation(
+  conversationId: string,
+  token: string,
+): Promise<{ message: string; conversation_id: string }> {
+  return apiRequest<{ message: string; conversation_id: string }>(
+    `/conversations/${encodeURIComponent(conversationId)}`,
+    {
+      method: "DELETE",
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    },
+  );
+}
+
+
+export async function editChatMessage(
+  conversationId: string,
+  messageId: string,
+  message: string,
+  token: string,
+): Promise<{
+  conversation_id: string;
+  message_id: string;
+  user_message: string;
+  reply: string;
+}> {
+  return apiRequest(
+    `/conversations/${encodeURIComponent(conversationId)}/messages/${encodeURIComponent(messageId)}`,
+    {
+      method: "PATCH",
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify({ message }),
+    },
+  );
+}
